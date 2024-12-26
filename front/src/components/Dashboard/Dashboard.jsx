@@ -1,28 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import { fetchUser } from '../../services/apiService'
-import './Dashboard.scss'
-import { toast } from 'react-toastify'
+import React, { useState, useEffect } from 'react';
+import { fetchQueues } from '../../services/apiService';
+import QueueList from '../QueueList/QueueList';
+import QueueForm from '../QueueForm/QueueForm';
+import './Dashboard.scss';
 
 export default function Dashboard() {
-	const [user, setUser] = useState(null)
+	const [queues, setQueues] = useState({});
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		fetchUserOnload()
-	}, [])
+		refreshQueues();
+	}, []);
 
-	const fetchUserOnload = async () => {
+	const refreshQueues = async () => {
+		setLoading(true);
 		try {
-			const response = await fetchUser()
-			setUser(response)
+			const queues = await fetchQueues();
+			setQueues(queues);
 		} catch (error) {
-			toast.error('Error fetching user')
+			console.error('Error fetching queues:', error);
+		} finally {
+			setLoading(false);
 		}
-	}
+	};
 
 	return (
-		<div className='dashboard'>
-			<h2>Welcome to your dashboard!</h2>
-
+		<div className="dashboard">
+			<h1 style={{ color: '#233746' }}>Voyantis Message Queue Management</h1>
+			{loading && <p>Loading...</p>}
+			<QueueList queues={queues} onQueueUpdate={refreshQueues} />
+			<QueueForm onQueueSubmit={refreshQueues} />
 		</div>
-	)
+	);
 }

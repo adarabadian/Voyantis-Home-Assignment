@@ -6,7 +6,7 @@ import Dashboard from '../../components/Dashboard/Dashboard';
 export default function MainPage() {
 	return (
 		<div className='main-page'>
-			<h1>Voyantis Home Assignment</h1>
+			<h1>Voyantis Home Assignment - Adar Abadian</h1>
 
 			<Dashboard />
 			{/* ToastContainer is a component from react-toastify that will display toast messages */}
